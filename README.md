@@ -6,8 +6,18 @@ A full-stack movie search application built with React + TypeScript (frontend) a
 
 ### Implemented Features
 
+✅ **Authentication System**
+- User registration with username, email, and password
+- User login with JWT token authentication
+- Protected routes for rating functionality
+- Session persistence with localStorage
+- User profile display in navigation
+
 ✅ **Main Page**
 - Search bar for searching movies via TMDB API
+- Genre filter dropdown with all TMDB genres
+- Year filter input for filtering by release year
+- Pagination with "Load More" button
 - Results listing with movie posters and titles
 - Loading states during API calls
 - Click on movie to open detail modal
@@ -16,14 +26,14 @@ A full-stack movie search application built with React + TypeScript (frontend) a
 - Displays movie synopsis
 - Shows release date
 - Lists cast members (top 5)
-- Rating system (1-5 stars)
+- Rating system (1-5 stars) - requires authentication
 - Add new rating if not yet rated
 - Edit existing rating
 - Delete existing rating
 - Close button
 
 ✅ **Rated Movies Page**
-- Lists all movies the user has rated
+- Lists all movies the authenticated user has rated
 - Shows movie title, poster, and user score
 - Click on movie to open detail modal
 - Empty state with link to search page
@@ -31,18 +41,13 @@ A full-stack movie search application built with React + TypeScript (frontend) a
 ✅ **Technical Features**
 - Full TypeScript implementation
 - RESTful API endpoints
-- SQLite database for storing ratings
+- SQLite database for storing users and ratings
+- JWT-based authentication with 24-hour token expiration
+- In-memory caching for TMDB API responses (1-hour TTL)
 - Docker containerization
 - Error handling throughout the application
 - Responsive design
 - Loading states for all async operations
-
-### Not Implemented Features
-
-❌ **Pagination / Infinite Scroll** - Currently shows first page of results only
-❌ **Filter by Genre or Year** - Basic search only
-❌ **Authentication** - No user authentication system
-❌ **Cache Implementation** - No caching layer
 
 ## Tech Stack
 
@@ -101,7 +106,7 @@ This will:
 ### 5. Access the Application
 
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
+- Backend API: http://localhost:5001
 
 ## Running Locally (Without Docker)
 
@@ -117,7 +122,7 @@ cp .env.example .env
 python app.py
 ```
 
-Backend will run on http://localhost:5000
+Backend will run on http://localhost:5001
 
 ### Frontend Setup
 
@@ -131,18 +136,26 @@ Frontend will run on http://localhost:3000
 
 ## API Endpoints
 
+### Authentication
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login user and receive JWT token
+- `GET /api/auth/me` - Get current user information (requires authentication)
+
 ### Movie Search
-- `GET /api/search?query={query}&page={page}` - Search movies via TMDB
+- `GET /api/search?query={query}&page={page}&genre={genre}&year={year}` - Search movies via TMDB with optional filters
 
 ### Movie Details
 - `GET /api/movie/{movie_id}` - Get detailed movie information including cast
 
-### Ratings
+### Genres
+- `GET /api/genres` - Get list of all movie genres from TMDB
+
+### Ratings (requires authentication)
 - `GET /api/ratings` - Get all user ratings
 - `POST /api/ratings` - Add a new rating
 - `PUT /api/ratings/{rating_id}` - Update an existing rating
 - `DELETE /api/ratings/{rating_id}` - Delete a rating
-- `GET /api/ratings/tmdb/{tmdb_id}` - Get rating by TMDB movie ID
+- `GET /api/ratings/tmdb/{tmdb_id}` - Get rating by TMDB movie ID for current user
 
 ### Health Check
 - `GET /health` - Health check endpoint
@@ -162,7 +175,11 @@ pixelsBreeders/
 │   │   │   ├── SearchPage.tsx
 │   │   │   ├── RatedMoviesPage.tsx
 │   │   │   ├── MovieCard.tsx
-│   │   │   └── MovieModal.tsx
+│   │   │   ├── MovieModal.tsx
+│   │   │   ├── LoginPage.tsx
+│   │   │   └── RegisterPage.tsx
+│   │   ├── contexts/       # React contexts
+│   │   │   └── AuthContext.tsx
 │   │   ├── App.tsx         # Main App component
 │   │   ├── main.tsx        # Entry point
 │   │   ├── api.ts          # API client
@@ -198,17 +215,22 @@ To test the application:
 
 1. Start the application with `docker-compose up --build`
 2. Navigate to http://localhost:3000
-3. Search for a movie (e.g., "Inception")
-4. Click on a movie to view details
-5. Rate the movie (1-5 stars)
-6. Navigate to "Rated Movies" to see your ratings
-7. Edit or delete ratings from the modal
+3. Register a new account (click "Register" in the navigation)
+4. Login with your credentials
+5. Search for a movie (e.g., "Inception")
+6. Filter by genre or year using the dropdowns
+7. Click "Load More" to see additional results
+8. Click on a movie to view details
+9. Rate the movie (1-5 stars)
+10. Navigate to "Rated Movies" to see your ratings
+11. Edit or delete ratings from the modal
+12. Logout and login again to test session persistence
 
 ## Troubleshooting
 
 ### Backend won't start
 - Ensure TMDB API key is correctly set in `.env` file
-- Check that port 5000 is not already in use
+- Check that port 5001 is not already in use
 
 ### Frontend can't connect to backend
 - Ensure backend is running before starting frontend
