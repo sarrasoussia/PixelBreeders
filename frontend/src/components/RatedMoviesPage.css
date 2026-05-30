@@ -1,0 +1,68 @@
+.rated-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #e50914;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.2rem;
+}
+
+.error-message {
+  color: #e50914;
+  padding: 1rem;
+  background: rgba(229, 9, 20, 0.1);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.no-ratings {
+  text-align: center;
+  padding: 4rem;
+  color: #888;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #e50914;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.rated-movie-card {
+  position: relative;
+}
+
+.user-rating-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(229, 9, 20, 0.9);
+  color: #ffffff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  z-index: 1;
+}

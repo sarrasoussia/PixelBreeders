@@ -1,0 +1,33 @@
+services:
+  backend:
+    build: ./backend
+    container_name: movie-backend
+    ports:
+      - "5001:5001"
+    environment:
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - DATABASE_URL=sqlite:///movies.db
+    volumes:
+      - ./backend:/app
+      - movie-data:/app/data
+    networks:
+      - movie-network
+
+  frontend:
+    build: ./frontend
+    container_name: movie-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:5001
+    networks:
+      - movie-network
+
+volumes:
+  movie-data:
+
+networks:
+  movie-network:
+    driver: bridge
